@@ -228,7 +228,9 @@ LOGO;
 	function printHostsInfo($name){
 		$ip = exec("/sbin/ifconfig eth1 | awk -F\"[ :]+\" '/inet addr/ && !/127.0/ {print $4}'");
         echo "To get started, add the following record to your [95mHOSTS[0m file: ([95m/etc/hosts[0m)\n\n";
-                echo "     " . str_pad($ip, 15) . "   " . $name . ".local\n";
+                foreach (getips($name) as $ip) {
+                	echo "     " . str_pad($ip, 15) . "   " . $name . ".local\n";
+                }
                 echo "\nYou can then access your site at: [95mhttp://" . $name . ".local/[0m\n";
 	}
 	
