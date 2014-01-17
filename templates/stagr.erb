@@ -322,9 +322,9 @@ FastCgiExternalServer /var/www/web/$name/redir/php -socket /var/fpm/socks/$name.
 	</FilesMatch>
 	AddHandler php5-$name-fcgi .php
 	Action php5-$name-fcgi /.ctrl/~~~php
-	Alias /.ctrl/~~~php /var/www/web/$name/redir/php
+	Alias /.ctrl/~~~php /var/www/web/$name/redir/php$docroot
 	
-	<Directory /var/www/web/$name/htdocs>
+	<Directory /var/www/web/$name/htdocs$docroot>
 		# PathInfo for PHP-FPM
 		RewriteEngine On
 		RewriteCond %{REQUEST_URI} \.php/ [NC]
