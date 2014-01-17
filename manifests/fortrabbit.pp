@@ -68,11 +68,13 @@ class fortrabbit {
 	}
 	
 	exec { "wget https://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2 && tar -xf wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2 -C /usr/local/bin":
+		path => '/bin:/usr/bin',
 		cwd => '/tmp',
 		unless => "test -f /usr/local/bin/wkhtmltopdf"
 	}
 	
 	exec { "mv wkhtmltopdf-amd64 wkhtmltopdf":
+		path => '/bin:/usr/bin',
 		cwd => $target_dir,
 		onlyif => "test -f /usr/local/bin/wkhtmltopdf-amd64"
 	}
