@@ -40,11 +40,11 @@ LOGO;
 		}
 
         $docroot = '';
-        echo "Please enter the document root (optional)^[[0m: ";
-        $docroot = trim(fgets(STDIN));"
+        echo "Please enter the document root (optional): ";
+        $docroot = trim(fgets(STDIN));
 	
 		//Setup Apache options
-		createSite($fname, $email);
+		createSite($fname, $email, $docroot);
 	
 		//Setup Git Repos
 		createGit($fname);
@@ -62,7 +62,7 @@ LOGO;
 		echo "  [31mError:[0m this script must be run as [31mroot[0m\n";
 	}
 
-	function createSite($name, $email){
+	function createSite($name, $email, $docroot) {
 		echo "\n\n[33mSite Setup\n––––––––––[0m\n";
 
 		//Create Folder
@@ -88,7 +88,7 @@ LOGO;
 		//Create Vhost File
 		echo "Creating Site File ... ";
 		$sf = fopen("/etc/apache2/sites-available/" . $name, "w");
-		$site = getSite($name, $email);
+		$site = getSite($name, $email, $docroot);
 		fwrite($sf, $site);
 		fclose($sf);
 		echo "[36mOK[0m\n";
@@ -303,7 +303,7 @@ LOGO;
 	}
 	
 	//function to return Vhost
-	function getSite($name, $email){
+	function getSite($name, $email, $docroot){
 		return <<<SITE
 
 FastCgiExternalServer /var/www/web/$name/redir/php -socket /var/fpm/socks/$name.sock -idle-timeout 305 -flush
