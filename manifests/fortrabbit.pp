@@ -50,10 +50,6 @@ class fortrabbit {
 		'php5-cli':
 			ensure => installed,
 			require => Package['php5-fpm'];
-			
-		'wkhtmltopdf':
-			ensure => installed,
-			require => Exec['update-apt'];
 
 		[ "php5-xdebug", "php5-tidy", "php5-sqlite", "php5-redis", "php5-pgsql", "php5-mysqlnd", "php5-memcache", "php5-memcached", "php5-mcrypt", "php5-imagick", "php5-http", "php5-gmp", "php5-gd", "php5-curl", "php5-apc", "php5-intl", "php5-igbinary", "php5-mongo", "php5-oauth", "php5-phalcon", "php5-runkit", "php5-stats", "php5-stomp", "php5-yaf", "php5-yaml" ]: 
 			ensure	=> installed, 
@@ -69,6 +65,16 @@ class fortrabbit {
 		path => '/bin:/usr/bin',
 		command => 'curl -s https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer',
 		require => Package[ 'php5-cli' ];
+	}
+	
+	exec { "wget https://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2 && tar -xf wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2 -C /usr/local/bin":
+		cwd => '/tmp',
+		unless => "test -f /usr/local/bin/wkhtmltopdf"
+	}
+	
+	exec { "mv wkhtmltopdf-amd64 wkhtmltopdf":
+		cwd => $target_dir,
+		onlyif => "test -f /usr/local/bin/wkhtmltopdf-amd64"
 	}
 
 	$gitHookDir = '/home/vagrant/PHP-GIT-Hooks'
