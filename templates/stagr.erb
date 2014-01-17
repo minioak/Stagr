@@ -149,14 +149,14 @@ LOGO;
 		$hostsSeen = false;
 		foreach ($hostsOld as $hostLine) {
 			list($ip, $hosts) = preg_split('/\s+/', $hostLine, 2);
-			if (preg_match('/\b'. $name. '\.mysql\.dev/', $hosts)) {
+			if (preg_match('/\b'. $name. '\.mysql\.local/', $hosts)) {
 				$hostsSeen = true;
 				break;
 			}
 		}
 		if (!$hostsSeen) {
 			$hf = fopen($hostsFile, "a");
-			fwrite($hf, "127.0.0.1    $name.mysql.dev\n");
+			fwrite($hf, "127.0.0.1    $name.mysql.local\n");
 			fclose($hf);
 		}
 		echo "[36mOK[0m\n";
@@ -225,10 +225,11 @@ LOGO;
 	}
 
 	//Function to display IP address of current VM for hosts purposes
-	function printHostsInfo($name){ 
+	function printHostsInfo($name){
+        $ip = exec("ip -4 -o addr show label eth1")
 		echo "To get started, add the following record to your [95mHOSTS[0m file: ([95m/etc/hosts[0m)\n\n";
-                echo "     " . str_pad("127.0.0.1", 15) . "   " . $name . ".dev\n";
-                echo "\nYou can then access your site at: [95mhttp://" . $name . ".dev:8080/[0m\n";
+                echo "     " . str_pad($ip, 15) . "   " . $name . ".local\n";
+                echo "\nYou can then access your site at: [95mhttp://" . $name . ".local/[0m\n";
 	}
 	
 	//Helper function to get IP's
@@ -236,7 +237,7 @@ LOGO;
 		exec("ip -4 -o addr show label eth*", $arr);
 		foreach($arr as $k => $ip)
 		{
-			$arr[$k] = "     " . str_pad(filterIP($ip), 15) . "   " . $name . ".dev\n";
+			$arr[$k] = "     " . str_pad(filterIP($ip), 15) . "   " . $name . ".local\n";
 		}
 		return implode("", $arr);
 	}
@@ -251,13 +252,13 @@ LOGO;
 	//Function to display the GIT remote address
 	function printGitInfo($name){
 		echo "\nAnd add this server to your [95mGIT[0m repository:\n\n";
-		echo "     git remote add staging ssh://vagrant@" . $name . ".dev:2222/home/vagrant/" . $name . ".git\n";
+		echo "     git remote add staging ssh://vagrant@" . $name . ".local/home/vagrant/" . $name . ".git\n";
 	}
 
 	//Function to display MySQL connection info
 	function printMySQLInfo($name) {
 		echo "\nTo connect to your MySQL database from your App use:\n\n";
-		echo "     Host:     $name.mysql.dev\n";
+		echo "     Host:     $name.mysql.local\n";
 		echo "     User:     $name\n";
 		echo "     Password: $name\n";
 	}
@@ -305,7 +306,7 @@ FastCgiExternalServer /var/www/web/$name/redir/php -socket /var/fpm/socks/$name.
 
 <VirtualHost *:80>
 	ServerAdmin $email
-	ServerName $name.dev
+	ServerName $name.local
 	DocumentRoot /var/www/web/$name/htdocs
 
 	SetEnv APP_NAME "$name"
