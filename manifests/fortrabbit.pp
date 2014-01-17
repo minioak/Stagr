@@ -73,7 +73,7 @@ class fortrabbit {
 		unless => "test -f /usr/local/bin/wkhtmltopdf"
 	}
 	
-	exec { "mv wkhtmltopdf-amd64 wkhtmltopdf":
+	exec { "mv /usr/local/bin/wkhtmltopdf-amd64 /usr/local/bin/wkhtmltopdf":
 		path => '/bin:/usr/bin',
 		cwd => $target_dir,
 		onlyif => "test -f /usr/local/bin/wkhtmltopdf-amd64"
