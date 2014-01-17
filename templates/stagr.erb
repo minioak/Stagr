@@ -38,6 +38,10 @@ LOGO;
 				$fname = '';
 			}
 		}
+
+        $docroot = '';
+        echo "Please enter the document root (optional)^[[0m: ";
+        $docroot = trim(fgets(STDIN));"
 	
 		//Setup Apache options
 		createSite($fname, $email);
@@ -307,7 +311,7 @@ FastCgiExternalServer /var/www/web/$name/redir/php -socket /var/fpm/socks/$name.
 <VirtualHost *:80>
 	ServerAdmin $email
 	ServerName $name.local
-	DocumentRoot /var/www/web/$name/htdocs
+	DocumentRoot /var/www/web/$name/htdocs$docroot
 
 	SetEnv APP_NAME "$name"
 
